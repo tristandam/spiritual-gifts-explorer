@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { GiftIconMark } from "@/components/gifts/icons"
 import { GiftResultNote } from "@/components/gifts/GiftResultNote"
+import { GiftSources } from "@/components/gifts/GiftSources"
 import type { SpiritualGift } from "@/lib/types"
 
 export function GiftDetail({ gift }: { gift: SpiritualGift }) {
@@ -57,15 +58,16 @@ export function GiftDetail({ gift }: { gift: SpiritualGift }) {
         </ul>
       </section>
 
-      <section className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-[#17243A]/10">
+      <section className="mt-8 rounded-3xl bg-white p-5 ring-1 ring-[#17243A]/10 sm:p-6">
         <h2 className="font-serif text-2xl text-[#17243A]">What can I pray about?</h2>
-        <p className="mt-3 leading-relaxed text-[#17243A]">{gift.reflectionQuestion}</p>
-        <p className="mt-4 text-sm text-[#667085]">
-          Patron named in the Diocese of Cleveland inventory: {gift.patronSaint}
+        <p className="mt-3 text-base leading-relaxed text-[#17243A]">{gift.reflectionQuestion}</p>
+        <p className="mt-4 text-base leading-relaxed text-[#17243A]">
+          <span className="font-semibold">Patron saint: </span>
+          {gift.patronSaint}
         </p>
-        <p className="mt-2 text-sm text-[#667085]">
-          Scripture connected with this gift in that inventory: {gift.scriptureReferences.join(", ")}
-        </p>
+        <div className="mt-6">
+          <GiftSources gift={gift} />
+        </div>
       </section>
     </article>
   )

@@ -1,6 +1,9 @@
 import type { GiftId, SpiritualGift } from "@/lib/types"
+import { giftSources } from "@/data/gift-sources"
 
-export const gifts: SpiritualGift[] = [
+const giftDrafts: Array<
+  Omit<SpiritualGift, "scriptureReferences" | "catechismReferences" | "possibleRoles">
+> = [
   {
     id: "administration",
     slug: "administration",
@@ -10,12 +13,6 @@ export const gifts: SpiritualGift[] = [
       "You bring people, time, and resources together so a good work can actually get finished.",
     detailedDescription:
       "Administration is a charism for organizing people and practical details in service of a larger purpose. It is more than liking a neat binder. People who recognize this gift often see how the pieces of a project fit, and they can meet Christ in the patient work of turning a vision into a plan. The Diocese of Cleveland inventory describes this gift as a passion for organizing so the Church's mission can move forward.",
-    scriptureReferences: [
-      "Exodus 18:17-23",
-      "Luke 14:28-30",
-      "Acts 6:1-7",
-      "1 Corinthians 12:28",
-    ],
     patronSaint: "St. Teresa of Avila",
     everydayExamples: [
       "Map out a group project so every person knows the next step.",
@@ -40,12 +37,6 @@ export const gifts: SpiritualGift[] = [
       "You make useful and beautiful things that can serve people and give glory to God.",
     detailedDescription:
       "Craftsmanship is a charism for shaping matter with skill and care. It shows up in art, repairs, cooking, sewing, building, and the hands-on work of making a space ready. The Diocese of Cleveland inventory connects this gift with reflecting God's beauty through what we create, and with meeting Christ in the joy of making. The point is not perfection. It is offering honest work for the good of others.",
-    scriptureReferences: [
-      "Exodus 31:1-11",
-      "Exodus 35:30-35",
-      "Proverbs 22:29",
-      "Ephesians 2:10",
-    ],
     patronSaint: "St. Joseph",
     everydayExamples: [
       "Repair, build, or decorate something that makes a home or classroom more welcoming.",
@@ -70,12 +61,6 @@ export const gifts: SpiritualGift[] = [
       "You use phones, cameras, and design tools to connect people with one another and with the Gospel.",
     detailedDescription:
       "Digital media, in this inventory, is not simply being online a lot. It is a charism for using virtual tools to inspire hearts and help people find Christ. The Diocese of Cleveland describes people with this gift as comfortable in digital spaces and creative about connecting others to the Gospel. For a teenager, that might mean photography, graphics, captions, livestreams, or a group chat used with care and kindness.",
-    scriptureReferences: [
-      "Matthew 28:16-20",
-      "Mark 16:15",
-      "Ephesians 4:29",
-      "James 1:19-25",
-    ],
     patronSaint: "Bl. Carlo Acutis",
     everydayExamples: [
       "Design a clear graphic that helps people know when and where to show up.",
@@ -100,12 +85,6 @@ export const gifts: SpiritualGift[] = [
       "You pause to notice what is of God when a choice or conflict is unclear.",
     detailedDescription:
       "Discernment is a charism for recognizing Christ's presence and seeking the Holy Spirit's guidance in real decisions. The Diocese of Cleveland inventory describes it as a keen sense of what is good and true, along with enough trust to help others pray about a choice. It is not a license to judge people. It is a habit of listening before you act, especially when pressure, fear, or popularity is loud.",
-    scriptureReferences: [
-      "1 Kings 3:5-12",
-      "Matthew 7:15-20",
-      "1 Corinthians 12:4-11",
-      "1 John 4:1-6",
-    ],
     patronSaint: "St. Ignatius of Loyola",
     everydayExamples: [
       "Take a day to pray before a big decision about friends, time, or a commitment.",
@@ -130,12 +109,6 @@ export const gifts: SpiritualGift[] = [
       "You notice when people need hope, and your listening helps them feel seen.",
     detailedDescription:
       "Encouragement is a charism of listening so well that another person can breathe again. The Diocese of Cleveland inventory describes it as helping people feel heard, seen, and cared for, often leading them toward renewed hope. It is fueled by compassion, and it leaves the encourager more alive, not drained by gossip or fixing everyone. You do not have to have the perfect speech. Staying present is already a gift.",
-    scriptureReferences: [
-      "Acts 4:36",
-      "Romans 12:8",
-      "1 Thessalonians 5:11",
-      "Hebrews 10:24-25",
-    ],
     patronSaint: "St. Dymphna",
     everydayExamples: [
       "Sit with a friend after a hard grade, a family worry, or a lonely week.",
@@ -160,12 +133,6 @@ export const gifts: SpiritualGift[] = [
       "You want other people to meet Jesus, and you can talk about your faith in ordinary life.",
     detailedDescription:
       "Evangelism is a charism for sharing the good news of Jesus in word and action so others can draw closer to him and his Church. The Diocese of Cleveland inventory describes people with this gift as ready to bring faith into daily conversations, not only into church programs. For a teenager, that usually looks like a honest story, a kind invitation, or a life that makes someone curious. It does not require a loud personality or a perfect argument.",
-    scriptureReferences: [
-      "Luke 9:1-6",
-      "Acts 8:26-40",
-      "Romans 10:14-15",
-      "2 Timothy 4:1-5",
-    ],
     patronSaint: "Bl. Miguel Pro",
     everydayExamples: [
       "Tell a friend, simply, how prayer or Mass has helped you.",
@@ -190,12 +157,6 @@ export const gifts: SpiritualGift[] = [
       "You trust God's care enough to keep going, and that trust can steady other people.",
     detailedDescription:
       "The charism of faith in this inventory is an unusual freedom to trust God's providence and to act on that trust. The Diocese of Cleveland describes it as confidence that God will provide, even when the path looks risky or unclear, and as a witness that draws other people toward Christ. Every baptized person is called to believe. A lower score here does not mean your faith is weak or that God is distant. It means these particular questions did not describe you as strongly today.",
-    scriptureReferences: [
-      "Mark 2:1-5",
-      "Luke 17:5-6",
-      "1 Corinthians 12:9",
-      "Hebrews 11:1",
-    ],
     patronSaint: "St. Therese of Lisieux",
     everydayExamples: [
       "Keep praying and showing up when a situation has no quick fix.",
@@ -220,12 +181,6 @@ export const gifts: SpiritualGift[] = [
       "Sharing your time, money, or things with people in need is one of the ways you pray.",
     detailedDescription:
       "All Christians are called to be generous. The charism of giving is a particular joy in providing for other people's needs with time, talent, or treasure. The Diocese of Cleveland inventory says people with this gift encounter Christ through generosity and feel especially alive when they give. It is not about having a lot. The Gospel's widow gave two small coins. What matters is a free and cheerful gift.",
-    scriptureReferences: [
-      "Mark 12:41-44",
-      "Luke 6:30",
-      "Acts 4:32-35",
-      "2 Corinthians 9:6-11",
-    ],
     patronSaint: "St. Katherine Drexel",
     everydayExamples: [
       "Set aside part of your money or time for someone who has less.",
@@ -250,12 +205,6 @@ export const gifts: SpiritualGift[] = [
       "You are drawn to pray that God would restore people who are hurting in body, mind, or spirit.",
     detailedDescription:
       "Healing is a charism through which the Holy Spirit restores people who suffer physically, mentally, emotionally, or spiritually. The Diocese of Cleveland inventory describes a comforting, restorative presence that reveals God's care in the middle of brokenness. It is not the same thing as being a kind friend, though kindness matters. The Church also asks for prudence: prayer for healing belongs with the sacraments, medical care, and trusted adults. This questionnaire can only notice a desire to pray. It cannot declare that God heals through you.",
-    scriptureReferences: [
-      "Luke 9:1-2",
-      "Acts 3:1-10",
-      "1 Corinthians 12:9",
-      "James 5:14-16",
-    ],
     patronSaint: "St. Kateri Tekakwitha",
     discernmentNote:
       "A short self-check cannot confirm the charism of healing. Never promise a cure. If you pray with someone who is sick or in crisis, do it with a parent, youth leader, or priest nearby, and encourage professional and medical help when it is needed.",
@@ -282,12 +231,6 @@ export const gifts: SpiritualGift[] = [
       "You love the quiet work that lets someone else do what God is asking of them.",
     detailedDescription:
       "Helping is a charism of background support. The Diocese of Cleveland inventory describes it as a desire to assist others so they can respond to their own call. It is personal, often unnoticed, and aimed at building up the Church through someone else's visible work. Helping is close to service, but its focus is enabling a person: the speaker, the musician, the teacher, the leader. Faithfulness here looks like loyalty, not the spotlight.",
-    scriptureReferences: [
-      "Mark 15:40-41",
-      "Romans 16:1-2",
-      "1 Corinthians 12:28",
-      "1 Peter 4:10",
-    ],
     patronSaint: "St. Vincent de Paul",
     everydayExamples: [
       "Prep materials so a teacher, parent, or teammate can focus.",
@@ -312,12 +255,6 @@ export const gifts: SpiritualGift[] = [
       "You help people feel that there is a place for them, especially when they are new or unsure.",
     detailedDescription:
       "Hospitality is a charism for creating welcome, especially for people who feel disconnected. The Diocese of Cleveland inventory describes a culture of belonging, respect, and home, and a way of meeting Christ in the stranger. It can be as simple as learning a name, saving a seat, or noticing who is standing alone. Hospitality is not a performance. It is making room.",
-    scriptureReferences: [
-      "Genesis 18:1-8",
-      "Romans 12:13",
-      "Hebrews 13:1-2",
-      "1 Peter 4:9",
-    ],
     patronSaint: "St. Andre Bessette",
     everydayExamples: [
       "Invite a new student to sit with you at lunch.",
@@ -342,12 +279,6 @@ export const gifts: SpiritualGift[] = [
       "You keep praying for other people, and you trust that God hears even when the answer is slow.",
     detailedDescription:
       "Intercession is a charism of praying for others with patience and real trust. The Diocese of Cleveland inventory describes a strong call to stand before God on behalf of people in need, confident that God hears. It is different from worrying about someone. Intercession turns concern into prayer and stays with that prayer. You do not have to feel holy. You have to be willing to ask.",
-    scriptureReferences: [
-      "Luke 22:39-44",
-      "John 17:9-21",
-      "1 Timothy 2:1-3",
-      "James 5:16",
-    ],
     patronSaint: "St. Padre Pio",
     everydayExamples: [
       "Keep a short list of people to pray for by name.",
@@ -372,12 +303,6 @@ export const gifts: SpiritualGift[] = [
       "Studying Scripture and the Church's teaching helps you know God and help others understand.",
     detailedDescription:
       "In this inventory, knowledge is a charism for seeking God through study, especially Scripture, the saints, and the teaching of the Church. The Diocese of Cleveland describes people who meet Christ in that intellectual tradition and who can share what they learn. This is related to, but not the same as, the gift of knowledge among the seven gifts of the Holy Spirit named in Catholic teaching. A love of learning can become a charism when it builds up other people's faith rather than only collecting facts.",
-    scriptureReferences: [
-      "Deuteronomy 11:18",
-      "Proverbs 2:1-6",
-      "1 Corinthians 12:8",
-      "Colossians 2:2-3",
-    ],
     patronSaint: "St. Edith Stein",
     everydayExamples: [
       "Read a Gospel passage or a saint's story and sit with one line.",
@@ -402,12 +327,6 @@ export const gifts: SpiritualGift[] = [
       "You can see other people's gifts and help a group move toward a goal together.",
     detailedDescription:
       "Leadership in this inventory is the charism of seeing what God has given other people and inviting those gifts into a shared work. The Diocese of Cleveland describes leaders who hold a vision, help a group finish it, and model service rather than control. Jesus' picture of leadership is the one who serves. A strong score here is an invitation to responsibility, not to being the loudest voice in the room.",
-    scriptureReferences: [
-      "Nehemiah 2:17-18",
-      "Mark 9:35",
-      "Acts 6:2-4",
-      "Romans 12:8",
-    ],
     patronSaint: "St. Thomas More",
     everydayExamples: [
       "Ask teammates what they do well before you assign the work.",
@@ -432,12 +351,6 @@ export const gifts: SpiritualGift[] = [
       "Suffering moves you to act, and you want to relieve it without making people earn your care.",
     detailedDescription:
       "Mercy is a charism of compassion that becomes action. The Diocese of Cleveland inventory describes a sensitivity to suffering and a free gift of self that eases physical, spiritual, or emotional pain. Mercy also shows up as forgiveness. It is close to encouragement, but it goes further: it moves toward the wound and tries to relieve it. You cannot carry every hurt. You can refuse to look away from the one in front of you.",
-    scriptureReferences: [
-      "Matthew 25:34-40",
-      "Luke 10:30-37",
-      "Romans 12:8",
-      "James 2:15-16",
-    ],
     patronSaint: "St. Maximilian Kolbe",
     everydayExamples: [
       "Help a classmate who is struggling get a meal, a ride, or a listening ear.",
@@ -462,12 +375,6 @@ export const gifts: SpiritualGift[] = [
       "You build friendships across cultures and help a community become wider than one circle.",
     detailedDescription:
       "Global and cultural engagement is a charism for connecting with people of different cultures, languages, and backgrounds, and for letting those relationships strengthen the Church. The Diocese of Cleveland inventory describes both a zeal to share Christ and a willingness to be taught by other people's gifts. It is not about collecting cultures as a hobby. It is about communion: learning names, stories, and ways of praying, and making sure no group is treated as an outsider in the Body of Christ.",
-    scriptureReferences: [
-      "Matthew 28:16-20",
-      "Acts 8:26-39",
-      "1 Corinthians 9:19-23",
-      "Ephesians 3:8-9",
-    ],
     patronSaint: "St. Damian of Molokai",
     everydayExamples: [
       "Learn from a classmate whose language, food, or parish customs differ from yours.",
@@ -492,12 +399,6 @@ export const gifts: SpiritualGift[] = [
       "You help people pray through singing or playing, and music draws you toward God.",
     detailedDescription:
       "Musicianship here is a charism of praise. The Diocese of Cleveland inventory describes people who meet Christ in song and help others enter that prayer, whether by writing music, singing, or playing. Enjoying playlists is not the same gift. The sign is that music becomes a way the community worships. If you do not sing or play, a low score is simply honest. God is not asking every person to lead the choir.",
-    scriptureReferences: [
-      "Psalm 96:1-3",
-      "Psalm 150:3-6",
-      "Ephesians 5:19-20",
-      "James 5:13",
-    ],
     patronSaint: "St. Cecilia",
     everydayExamples: [
       "Sing at Mass instead of only listening.",
@@ -522,12 +423,6 @@ export const gifts: SpiritualGift[] = [
       "You walk with people over time and care about their friendship with Jesus.",
     detailedDescription:
       "Shepherding is a charism for guiding people on a shared journey of faith through real relationships. The Diocese of Cleveland inventory describes prayer, personal encounter with Christ, and the patience to form people so they can share the Gospel themselves. It is different from running an event. A shepherd knows names, notices who is drifting, and stays. Teenagers can live this gift by caring for younger students or friends without acting like a parent or a boss.",
-    scriptureReferences: [
-      "Ezekiel 34:11-16",
-      "John 10:11-15",
-      "John 21:15-17",
-      "1 Peter 5:2-3",
-    ],
     patronSaint: "St. John Vianney",
     everydayExamples: [
       "Check in with a friend over several weeks, not only once.",
@@ -552,12 +447,6 @@ export const gifts: SpiritualGift[] = [
       "You can help people in conflict listen to each other and take a next step together.",
     detailedDescription:
       "Peacemaking is a charism for bringing people together across a disagreement. The Diocese of Cleveland inventory describes patience, careful listening, and the ability to gather different views into a way forward. It is not avoiding hard topics or pretending everyone is right. A peacemaker tells the truth without humiliating people, and stays in the room long enough for repair to begin.",
-    scriptureReferences: [
-      "Proverbs 17:14",
-      "Matthew 5:9",
-      "2 Corinthians 5:18-20",
-      "Hebrews 12:14",
-    ],
     patronSaint: "St. Catherine of Siena",
     everydayExamples: [
       "Help two friends hear each other before the argument hardens.",
@@ -582,12 +471,6 @@ export const gifts: SpiritualGift[] = [
       "You feel urged to speak God's truth with courage, especially when something needs to change.",
     detailedDescription:
       "In Catholic tradition, prophecy is not fortune-telling and not a personality trait of being outspoken. The Diocese of Cleveland inventory describes a grace for recognizing God's presence and speaking a message of truth and conversion that can stir hearts. St. Paul says the one who prophesies speaks to people for their building up, encouragement, and consolation. A questionnaire cannot confirm this charism. Strong impressions should be tested with Scripture, prayer, and a trusted adult. Never use 'God told me' to pressure, frighten, or control someone.",
-    scriptureReferences: [
-      "Luke 3:1-18",
-      "Romans 12:6",
-      "1 Corinthians 14:1-3",
-      "Revelation 19:10",
-    ],
     patronSaint: "St. Juan Diego",
     discernmentNote:
       "Prophecy in the Church is a charism of building people up in truth, not predicting fortunes or winning arguments. This assessment cannot tell you that you have it. Test any strong sense that you should speak for God with prayer, Scripture, and a parent, youth leader, or priest.",
@@ -614,12 +497,6 @@ export const gifts: SpiritualGift[] = [
       "You notice the practical work other people pass by, and you do it without needing applause.",
     detailedDescription:
       "Service is a charism for giving time and effort freely, with little concern for status, so that another person or the whole community is better off. The Diocese of Cleveland inventory describes humble acts of love in which people meet Christ. It is close to helping, but service looks especially at the task itself: the chairs, the trash, the setup, the person who needs a hand. Joy in hidden work is a sign. Resentment at not being thanked is a signal to pray, not a verdict on your worth.",
-    scriptureReferences: [
-      "Luke 22:24-27",
-      "John 13:12-15",
-      "Romans 12:7",
-      "Galatians 6:2",
-    ],
     patronSaint: "St. Teresa of Calcutta",
     everydayExamples: [
       "Clean up after a meeting, meal, or practice without being assigned.",
@@ -644,12 +521,6 @@ export const gifts: SpiritualGift[] = [
       "You can explain an idea so that another person truly understands and grows.",
     detailedDescription:
       "Teaching is a charism for communicating truth clearly so people can grow. The Diocese of Cleveland inventory describes a focused desire to lead others to greater understanding, in faith and in ordinary learning. It is not the same as getting good grades. The sign is that someone else can now see what they could not see before. Patience, a second example, and respect for questions all belong to this gift.",
-    scriptureReferences: [
-      "Matthew 28:19-20",
-      "Romans 12:7",
-      "1 Corinthians 12:28",
-      "Ephesians 4:11-13",
-    ],
     patronSaint: "St. Jean-Baptist de La Salle",
     everydayExamples: [
       "Explain a homework concept until a classmate can try it alone.",
@@ -674,12 +545,6 @@ export const gifts: SpiritualGift[] = [
       "You want a simpler life so you can stay close to Jesus and to people who have less.",
     detailedDescription:
       "Voluntary poverty is a charism of joyful simplicity and solidarity with people who are poor. The Diocese of Cleveland inventory roots it in Jesus' love for the poor and in a lifestyle shaped by that love. For a high school student, this does not mean leaving home or rejecting your family. It means telling the truth about extra stuff, status, and waste, and choosing generosity. A low score is not a failure of holiness. It may simply mean God is drawing you through a different gift right now.",
-    scriptureReferences: [
-      "Matthew 5:3",
-      "Matthew 6:19-21",
-      "Luke 9:57-58",
-      "2 Corinthians 8:9",
-    ],
     patronSaint: "St. Francis of Assisi",
     everydayExamples: [
       "Skip a purchase and give the money or the time to someone in need.",
@@ -704,12 +569,6 @@ export const gifts: SpiritualGift[] = [
       "People look to you for a calm, faithful next step when a situation is complicated.",
     detailedDescription:
       "Wisdom, as a charism in this inventory, is practical insight about God's direction and the courage to recommend a fitting next step. The Diocese of Cleveland describes people who can see a way through a tangle of circumstances and help others choose well. Catholic teaching also speaks of wisdom as one of the seven gifts of the Holy Spirit poured out for every Christian. This questionnaire is not measuring that gift in full. It notices whether you often help a community find a sound path. Age does not disqualify you. Listening does.",
-    scriptureReferences: [
-      "1 Kings 3:5-12",
-      "Proverbs 2:1-6",
-      "1 Corinthians 12:8",
-      "James 1:5",
-    ],
     patronSaint: "St. Thomas Aquinas",
     everydayExamples: [
       "Help a stressed group name the real problem before solving a fake one.",
@@ -734,12 +593,6 @@ export const gifts: SpiritualGift[] = [
       "Words on a page help you pray, tell the truth, and draw other people toward what is good.",
     detailedDescription:
       "Writing is a charism for composing words that reveal truth, goodness, and beauty. The Diocese of Cleveland inventory describes people for whom writing comes with a kind of ease, and whose words help others notice God. Journaling, letters, poems, testimony, captions, and articles can all be part of it. The gift is not a grade in English class. It is writing placed at the service of faith and of other people.",
-    scriptureReferences: [
-      "Psalm 45:1",
-      "1 Peter 3:15-16",
-      "1 Timothy 3:14-15",
-      "Jude 3",
-    ],
     patronSaint: "St. Francis de Sales",
     everydayExamples: [
       "Journal a prayer you could not say out loud.",
@@ -756,6 +609,11 @@ export const gifts: SpiritualGift[] = [
       "What truth becomes clearer when you take time to write it down?",
   },
 ]
+
+export const gifts: SpiritualGift[] = giftDrafts.map((gift) => ({
+  ...gift,
+  ...giftSources[gift.id],
+}))
 
 const giftById = new Map(gifts.map((gift) => [gift.id, gift]))
 const giftBySlug = new Map(gifts.map((gift) => [gift.slug, gift]))

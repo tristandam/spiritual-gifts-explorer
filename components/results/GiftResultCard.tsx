@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { GiftIconMark } from "@/components/gifts/icons"
+import { MAX_GIFT_SCORE } from "@/lib/constants"
 import type { SpiritualGift } from "@/lib/types"
 
 export function GiftResultCard({
@@ -19,7 +20,7 @@ export function GiftResultCard({
         </span>
         <p className="text-right">
           <span className="block font-serif text-3xl text-[#17243A]">{score}</span>
-          <span className="text-xs tracking-wide text-[#667085]">out of 8</span>
+          <span className="text-xs tracking-wide text-[#667085]">out of {MAX_GIFT_SCORE}</span>
         </p>
       </div>
       <h3 className="mt-4 font-serif text-2xl text-[#17243A]">{gift.name}</h3>

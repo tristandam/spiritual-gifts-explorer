@@ -8,7 +8,7 @@ import {
   saveAssessment,
 } from "@/lib/assessment-storage"
 import { ASSESSMENT_VERSION, GIFT_COUNT, QUESTION_COUNT } from "@/lib/constants"
-import { pairDistance, questionOrderForSeed } from "@/lib/question-order"
+import { minimumGiftSpacing, questionOrderForSeed } from "@/lib/question-order"
 import {
   isAnswerValue,
   isAssessmentComplete,
@@ -38,26 +38,42 @@ function answersWith(value: 1 | 2 | 3 | 4, overrides: Record<string, 1 | 2 | 3 |
 }
 
 describe("assessment content", () => {
-  it("has 50 questions and 25 gifts", () => {
+  it("has 75 questions and 25 gifts", () => {
     expect(questions).toHaveLength(QUESTION_COUNT)
     expect(gifts).toHaveLength(GIFT_COUNT)
-    expect(new Set(questions.map((question) => question.id)).size).toBe(50)
+    expect(new Set(questions.map((question) => question.id)).size).toBe(75)
     expect(new Set(gifts.map((gift) => gift.id)).size).toBe(25)
   })
 
-  it("gives every gift exactly two valid questions", () => {
-    for (const giftId of GIFT_IDS) {
-      const matches = questions.filter((question) => question.giftId === giftId)
-      expect(matches).toHaveLength(2)
+  it("includes diocesan scripture, catechism, and roles for every gift", () => {
+    for (const gift of gifts) {
+      expect(gift.scriptureReferences.length).toBeGreaterThan(2)
+      expect(gift.catechismReferences.length).toBeGreaterThan(0)
+      expect(gift.possibleRoles.length).toBeGreaterThan(3)
+    }
+  })
+
+  it("gives every gift the three diocesan prompts", () => {
+    for (const [index, giftId] of GIFT_IDS.entries()) {
+      const matches = questions
+        .filter((question) => question.giftId === giftId)
+        .sort((a, b) => a.prompt - b.prompt)
+      expect(matches.map((question) => question.prompt)).toEqual([index + 1, index + 26, index + 51])
       for (const question of matches) {
         expect(question.text.length).toBeGreaterThan(20)
-        expect(question.displayOrder).toBeGreaterThanOrEqual(0)
+        expect(question.displayOrder).toBe(question.prompt - 1)
       }
     }
   })
 
   it("uses only the four-point scale", () => {
     expect(ANSWER_SCALE.map((option) => option.value)).toEqual([1, 2, 3, 4])
+    expect(ANSWER_SCALE.map((option) => option.label)).toEqual([
+      "Not true",
+      "Somewhat true",
+      "Mostly true",
+      "Very true",
+    ])
     for (const option of ANSWER_SCALE) {
       expect(isAnswerValue(option.value)).toBe(true)
     }
@@ -67,25 +83,28 @@ describe("assessment content", () => {
     expect(isAnswerValue("4")).toBe(false)
   })
 
-  it("keeps the two questions for a gift apart", () => {
+  it("keeps the three questions for a gift apart", () => {
     const ordered = [...questions]
       .sort((a, b) => a.displayOrder - b.displayOrder)
       .map((question) => question.id)
-    expect(new Set(questions.map((question) => question.displayOrder)).size).toBe(50)
-    expect(pairDistance(ordered, questions)).toBeGreaterThanOrEqual(12)
+    expect(new Set(questions.map((question) => question.displayOrder)).size).toBe(75)
+    expect(minimumGiftSpacing(ordered, questions)).toBe(25)
     for (const seed of [1, 7, 42, 99, 2026]) {
       const seeded = questionOrderForSeed(questions, seed)
-      expect(new Set(seeded).size).toBe(50)
-      expect(pairDistance(seeded, questions)).toBeGreaterThanOrEqual(12)
+      expect(new Set(seeded).size).toBe(75)
+      expect(minimumGiftSpacing(seeded, questions)).toBe(25)
     }
   })
 })
 
 describe("scoring", () => {
-  it("sums the two answers for each gift", () => {
-    const report = scoreAssessment(answersWith(3, { "encouragement-1": 4, "encouragement-2": 4 }))
-    expect(report?.ranked.find((gift) => gift.giftId === "encouragement")?.score).toBe(8)
-    expect(report?.ranked.find((gift) => gift.giftId === "service")?.score).toBe(6)
+  it("sums the three answers for each gift", () => {
+    const report = scoreAssessment(
+      answersWith(3, { "encouragement-1": 4, "encouragement-2": 4, "encouragement-3": 4 }),
+    )
+    expect(report?.ranked.find((gift) => gift.giftId === "encouragement")?.score).toBe(12)
+    expect(report?.ranked.find((gift) => gift.giftId === "service")?.score).toBe(9)
+    expect(report?.ranked[0].maxScore).toBe(12)
   })
 
   it("refuses an incomplete or invalid assessment", () => {
@@ -102,12 +121,13 @@ describe("scoring", () => {
     for (const giftId of high) {
       overrides[`${giftId}-1`] = 4
       overrides[`${giftId}-2`] = 4
+      overrides[`${giftId}-3`] = 4
     }
     const report = scoreAssessment(answersWith(1, overrides))
     expect(report).not.toBeNull()
     const featuredIds = report!.featured.map((gift) => gift.giftId)
     expect(featuredIds).toHaveLength(4)
-    expect(new Set(report!.featured.map((gift) => gift.score))).toEqual(new Set([8]))
+    expect(new Set(report!.featured.map((gift) => gift.score))).toEqual(new Set([12]))
     expect(report!.tieSummary).toContain("equally strong")
     const again = scoreAssessment(answersWith(1, overrides))
     expect(again!.featured.map((gift) => gift.name)).toEqual(report!.featured.map((gift) => gift.name))
@@ -115,19 +135,66 @@ describe("scoring", () => {
     expect([...names].sort((a, b) => a.localeCompare(b))).toEqual(names)
   })
 
-  it("does not split a tie just to show three gifts", () => {
+  it("shows the top three and keeps a tied score up to five gifts", () => {
     const overrides: Record<string, 1 | 2 | 3 | 4> = {
       "teaching-1": 4,
       "teaching-2": 4,
+      "teaching-3": 4,
       "service-1": 4,
-      "service-2": 3,
+      "service-2": 4,
+      "service-3": 3,
       "helping-1": 4,
-      "helping-2": 3,
+      "helping-2": 4,
+      "helping-3": 3,
       "mercy-1": 4,
-      "mercy-2": 3,
+      "mercy-2": 4,
+      "mercy-3": 3,
     }
     const report = scoreAssessment(answersWith(1, overrides))
-    expect(report!.featured.map((gift) => gift.score)).toEqual([8, 7, 7, 7])
+    expect(report!.featured.map((gift) => gift.score)).toEqual([12, 11, 11, 11])
+  })
+
+  it("does not add a lower score just to reach five gifts", () => {
+    const overrides: Record<string, 1 | 2 | 3 | 4> = {
+      "teaching-1": 4,
+      "teaching-2": 4,
+      "teaching-3": 4,
+      "service-1": 4,
+      "service-2": 4,
+      "service-3": 3,
+      "helping-1": 4,
+      "helping-2": 4,
+      "helping-3": 2,
+      "wisdom-1": 3,
+      "wisdom-2": 3,
+      "wisdom-3": 3,
+      "writing-1": 3,
+      "writing-2": 3,
+      "writing-3": 3,
+    }
+    const report = scoreAssessment(answersWith(1, overrides))
+    expect(report!.featured.map((gift) => gift.giftId)).toEqual(["teaching", "service", "helping"])
+    expect(report!.featured.map((gift) => gift.score)).toEqual([12, 11, 10])
+  })
+
+  it("stops at five gifts when a tie is longer", () => {
+    const high = ["faith", "giving", "healing", "helping", "hospitality", "intercession"]
+    const overrides: Record<string, 1 | 2 | 3 | 4> = {}
+    for (const giftId of high) {
+      overrides[`${giftId}-1`] = 4
+      overrides[`${giftId}-2`] = 4
+      overrides[`${giftId}-3`] = 4
+    }
+    const report = scoreAssessment(answersWith(1, overrides))
+    expect(report!.featured.map((gift) => gift.name)).toEqual([
+      "Faith",
+      "Giving",
+      "Healing",
+      "Helping",
+      "Hospitality",
+    ])
+    expect(report!.ranked.filter((gift) => gift.score === 12)).toHaveLength(6)
+    expect(report!.tieSummary).toContain("One more gift shares the score of 12")
   })
 })
 
@@ -172,6 +239,8 @@ describe("pdf export", () => {
         score: 8,
         description: "You listen well.",
         scripture: ["Romans 12:8"],
+        catechism: ["1749-1845"],
+        possibleRoles: ["Youth Ministry"],
         tryThis: "Reach out to someone.",
       },
     ],

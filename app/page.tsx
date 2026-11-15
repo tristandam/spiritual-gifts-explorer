@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Clock, HeartHandshake, Sparkles, UserRound } from "lucide-react"
 import { DoveMark } from "@/components/brand/DoveMark"
 import { buttonVariants } from "@/components/ui/button"
-import { ATTRIBUTION, INDEPENDENT_DISCLAIMER } from "@/lib/constants"
+import { ATTRIBUTION, INDEPENDENT_DISCLAIMER, QUESTION_COUNT } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 const steps = [
@@ -21,10 +21,9 @@ const steps = [
 ]
 
 const facts = [
-  { icon: Clock, label: "About 10 minutes" },
-  { icon: Sparkles, label: "50 questions" },
-  { icon: HeartHandshake, label: "25 spiritual gifts" },
-  { icon: UserRound, label: "No account required" },
+  { icon: Clock, label: "About 15 minutes" },
+  { icon: Sparkles, label: `${QUESTION_COUNT} questions` },
+  { icon: HeartHandshake, label: "25 spiritual talents" },
 ]
 
 export default function HomePage() {
@@ -32,30 +31,26 @@ export default function HomePage() {
     <div>
       <section className="mx-auto grid max-w-5xl gap-10 px-4 pb-8 pt-10 sm:pt-16 lg:grid-cols-[1.3fr_0.7fr] lg:items-center">
         <div>
-          <p className="text-sm font-semibold tracking-wide text-[#8A6A12]">
-            A spiritual gifts discovery for Catholic teens
-          </p>
           <h1 className="mt-3 max-w-xl font-serif text-4xl leading-[1.1] text-[#17243A] sm:text-6xl">
-            Discover the Gifts God Has Given You
+            Discover the Spiritual Talents God Has Given You
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-[#3E4A5C]">
             The Holy Spirit works through each of us in unique ways. Discover your strengths, explore how God might be calling you, and learn how your gifts can serve others.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Link href="/assessment" className={cn(buttonVariants({ size: "lg" }), "bg-[#F5C842] text-[#17243A] hover:bg-[#e7b62a]")}>
-              Discover My Gifts
+              Discover My Talents
             </Link>
             <a href="#how-it-works" className={buttonVariants({ size: "lg", variant: "outline" })}>
               How Does It Work?
             </a>
           </div>
-          <p className="mt-4 text-sm text-[#667085]">No account. Your answers stay in this browser.</p>
         </div>
         <div className="rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_rgba(23,36,58,0.08)] ring-1 ring-[#17243A]/10">
           <DoveMark className="size-20" />
           <p className="mt-4 font-serif text-2xl text-[#17243A]">Come, Holy Spirit.</p>
           <p className="mt-2 leading-relaxed text-[#3E4A5C]">
-            This reflection is a starting point for prayer, conversation, and service. It is especially written for high school students in parish life and in VEYM.
+            This reflection is a starting point for prayer, conversation, and service. The questions are the Diocese of Cleveland inventory.
           </p>
         </div>
       </section>

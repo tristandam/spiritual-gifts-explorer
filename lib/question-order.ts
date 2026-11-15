@@ -1,14 +1,5 @@
+import { QUESTIONS_PER_GIFT } from "@/lib/constants"
 import { GIFT_IDS, type GiftId } from "@/lib/types"
-
-export const PASS_A: readonly number[] = [
-  0, 13, 6, 19, 3, 16, 9, 22, 1, 14, 7, 20, 4, 17, 10, 23, 2, 15, 8, 21, 5, 18,
-  11, 24, 12,
-]
-
-export const PASS_B: readonly number[] = [
-  17, 10, 23, 2, 15, 8, 21, 5, 18, 11, 24, 12, 0, 13, 6, 19, 3, 16, 9, 22, 1,
-  14, 7, 20, 4,
-]
 
 interface OrderableQuestion {
   id: string
@@ -25,30 +16,23 @@ function questionsByGift(questions: readonly OrderableQuestion[]) {
   return grouped
 }
 
-export function defaultQuestionOrder(
-  questions: readonly OrderableQuestion[],
-): string[] {
+function giftSets(questions: readonly OrderableQuestion[]) {
   const grouped = questionsByGift(questions)
+  return GIFT_IDS.map((giftId) => {
+    const set = grouped.get(giftId)
+    if (!set || set.length !== QUESTIONS_PER_GIFT) {
+      throw new Error(`Gift ${giftId} does not have ${QUESTIONS_PER_GIFT} questions.`)
+    }
+    return set
+  })
+}
+
+export function defaultQuestionOrder(questions: readonly OrderableQuestion[]): string[] {
+  const sets = giftSets(questions)
   const order: string[] = []
-
-  for (const index of PASS_A) {
-    const giftId = GIFT_IDS[index]
-    const pair = grouped.get(giftId)
-    if (!pair || pair.length < 2) {
-      throw new Error(`Gift ${giftId} does not have two questions.`)
-    }
-    order.push(pair[0].id)
+  for (let item = 0; item < QUESTIONS_PER_GIFT; item += 1) {
+    for (const set of sets) order.push(set[item].id)
   }
-
-  for (const index of PASS_B) {
-    const giftId = GIFT_IDS[index]
-    const pair = grouped.get(giftId)
-    if (!pair || pair.length < 2) {
-      throw new Error(`Gift ${giftId} does not have two questions.`)
-    }
-    order.push(pair[1].id)
-  }
-
   return order
 }
 
@@ -78,26 +62,16 @@ export function questionOrderForSeed(
   seed: number,
 ): string[] {
   const random = mulberry32(seed || 1)
-  const indexes = GIFT_IDS.map((_, index) => index)
-  const passA = shuffle(indexes, random)
-  const offset = 12
-  const passB = new Array<number>(passA.length)
-  passA.forEach((giftIndex, position) => {
-    passB[(position + offset) % passA.length] = giftIndex
-  })
-
-  const grouped = questionsByGift(questions)
+  const sets = giftSets(questions)
+  const pass = shuffle(sets, random)
   const order: string[] = []
-  for (const index of passA) {
-    order.push(grouped.get(GIFT_IDS[index])![0].id)
-  }
-  for (const index of passB) {
-    order.push(grouped.get(GIFT_IDS[index])![1].id)
+  for (let item = 0; item < QUESTIONS_PER_GIFT; item += 1) {
+    for (const set of pass) order.push(set[item].id)
   }
   return order
 }
 
-export function pairDistance(
+export function minimumGiftSpacing(
   order: readonly string[],
   questions: readonly OrderableQuestion[],
 ) {
@@ -113,8 +87,10 @@ export function pairDistance(
 
   let min = Number.POSITIVE_INFINITY
   for (const indexes of positions.values()) {
-    if (indexes.length < 2) continue
-    min = Math.min(min, indexes[1] - indexes[0])
+    const sorted = [...indexes].sort((a, b) => a - b)
+    for (let index = 1; index < sorted.length; index += 1) {
+      min = Math.min(min, sorted[index] - sorted[index - 1])
+    }
   }
   return min
 }

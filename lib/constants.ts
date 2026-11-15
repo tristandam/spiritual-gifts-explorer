@@ -1,4 +1,4 @@
-export const ASSESSMENT_VERSION = 1
+export const ASSESSMENT_VERSION = 2
 
 export const STORAGE_KEY = "called-by-the-spirit.assessment.v1"
 
@@ -20,10 +20,16 @@ export const APP_NAME = "Called by the Spirit"
 
 export const APP_TITLE = "Called by the Spirit — Discover Your Spiritual Gifts"
 
-export const QUESTION_COUNT = 50
+export const QUESTION_COUNT = 75
 
 export const GIFT_COUNT = 25
 
-export const MAX_GIFT_SCORE = 8
+export const QUESTIONS_PER_GIFT = 3
 
-export const MIN_GIFT_SCORE = 2
+export const MAX_GIFT_SCORE = 12
+
+export const MIN_GIFT_SCORE = 3
+
+export const FEATURED_MINIMUM = 3
+
+export const FEATURED_MAXIMUM = 5

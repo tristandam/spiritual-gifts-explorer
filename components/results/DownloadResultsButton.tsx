@@ -31,6 +31,8 @@ export function DownloadResultsButton({
             score: item.score,
             description: gift?.shortDescription ?? "",
             scripture: gift?.scriptureReferences ?? [],
+            catechism: gift?.catechismReferences ?? [],
+            possibleRoles: gift?.possibleRoles ?? [],
             tryThis: gift?.tryThis ?? "",
           }
         }),

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { gifts } from "@/data/gifts"
+import { GiftSources } from "@/components/gifts/GiftSources"
 import { DownloadResultsButton } from "@/components/results/DownloadResultsButton"
 import { GiftResultCard } from "@/components/results/GiftResultCard"
 import { GiftScoreChart } from "@/components/results/GiftScoreChart"
@@ -59,7 +60,7 @@ export function ResultsExperience() {
         <p className="mt-4 text-lg leading-relaxed text-[#17243A]">
           {incomplete
             ? "You started the assessment, and your answers are still saved on this device. Finish every question to see your gifts."
-            : "Finish the 50-question reflection to see a personal summary. Nothing is stored on a server."}
+            : "Finish the 75-question reflection to see a personal summary. Nothing is stored on a server."}
         </p>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <Link href="/assessment" className={buttonVariants()}>
@@ -85,14 +86,12 @@ export function ResultsExperience() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
       <p className="text-sm font-semibold tracking-wide text-[#8A6A12]">Results</p>
-      <h1 className="mt-2 font-serif text-4xl text-[#17243A] sm:text-5xl">Your Spiritual Gifts</h1>
+      <h1 className="mt-2 font-serif text-4xl text-[#17243A] sm:text-5xl">Your Spiritual Talents</h1>
       <p className="mt-3 max-w-2xl text-lg leading-relaxed text-[#17243A]">
         Here are some of the ways the Holy Spirit may be inviting you to serve.
       </p>
       <p className="mt-4 max-w-3xl text-sm leading-relaxed text-[#667085]">{report.tieSummary}</p>
-      <p className="mt-3 max-w-3xl rounded-2xl bg-[#FFF3D6] px-4 py-3 text-sm leading-relaxed text-[#17243A]">
-        {RESULTS_DISCLAIMER} A lower score does not mean you lack God&apos;s grace.
-      </p>
+
 
       <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {report.featured.map((item) => {
@@ -108,6 +107,27 @@ export function ResultsExperience() {
           )
         })}
       </div>
+
+      <section className="mt-10">
+        <h2 className="font-serif text-3xl text-[#17243A]">Scripture, the Church, and possible roles</h2>
+        <p className="mt-2 max-w-3xl text-base leading-relaxed text-[#17243A]">
+          These lists come from the Diocese of Cleveland inventory for the gifts at the top of your results.
+        </p>
+        <div className="mt-5 space-y-4">
+          {report.featured.map((item) => {
+            const gift = giftById.get(item.giftId)
+            if (!gift) return null
+            return (
+              <article key={gift.id} className="rounded-3xl bg-white p-5 ring-1 ring-[#17243A]/10 sm:p-6">
+                <h3 className="font-serif text-2xl text-[#17243A]">{gift.name}</h3>
+                <div className="mt-5">
+                  <GiftSources gift={gift} />
+                </div>
+              </article>
+            )
+          })}
+        </div>
+      </section>
 
       <div className="mt-8">
         {showChart ? (

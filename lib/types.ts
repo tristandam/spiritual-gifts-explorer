@@ -64,6 +64,8 @@ export interface SpiritualGift {
   shortDescription: string
   detailedDescription: string
   scriptureReferences: string[]
+  catechismReferences: string[]
+  possibleRoles: string[]
   patronSaint: string
   everydayExamples: string[]
   veymExamples: string[]
@@ -77,12 +79,13 @@ export interface AssessmentQuestion {
   id: string
   text: string
   giftId: GiftId
+  prompt: number
   displayOrder: number
 }
 
 export const ANSWER_SCALE: readonly { value: AnswerValue; label: string }[] = [
-  { value: 1, label: "Not like me" },
-  { value: 2, label: "A little like me" },
-  { value: 3, label: "Mostly like me" },
-  { value: 4, label: "Very much like me" },
+  { value: 1, label: "Not true" },
+  { value: 2, label: "Somewhat true" },
+  { value: 3, label: "Mostly true" },
+  { value: 4, label: "Very true" },
 ]

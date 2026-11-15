@@ -3,7 +3,7 @@ import { AssessmentExperience } from "@/components/assessment/AssessmentExperien
 
 export const metadata: Metadata = {
   title: "Assessment",
-  description: "A 50-question spiritual gifts reflection for Catholic high school students.",
+  description: "The 75-question Called by the Spirit gifts inventory.",
 }
 
 export default function AssessmentPage() {

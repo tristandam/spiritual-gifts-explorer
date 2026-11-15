@@ -2,6 +2,7 @@ import { jsPDF } from "jspdf"
 import {
   ATTRIBUTION,
   INDEPENDENT_DISCLAIMER,
+  MAX_GIFT_SCORE,
   RESULTS_DISCLAIMER,
   SOURCE_NAME,
   SOURCE_URL,
@@ -12,6 +13,8 @@ export interface PdfGiftSection {
   score: number
   description: string
   scripture: string[]
+  catechism: string[]
+  possibleRoles: string[]
   tryThis: string
 }
 
@@ -85,18 +88,22 @@ export function buildResultsLines(input: PdfInput): PdfLine[] {
   }
 
   for (const gift of input.featured) {
-    lines.push(line(`${gift.name}  ·  ${gift.score} of 8`, 13, "bold", 4, NAVY))
+    lines.push(line(`${gift.name}  ·  ${gift.score} of ${MAX_GIFT_SCORE}`, 13, "bold", 4, NAVY))
     lines.push(line(gift.description, 11, "normal", 4))
-    lines.push(line(`Try this: ${gift.tryThis}`, 11, "italic", 4))
-    lines.push(
-      line(
-        `Scripture: ${gift.scripture.join("; ")}`,
-        10,
-        "normal",
-        12,
-        MUTED,
-      ),
-    )
+    lines.push(line(`Try this: ${gift.tryThis}`, 11, "italic", 6))
+    lines.push(line("Possible roles", 12, "bold", 3, NAVY))
+    for (const role of gift.possibleRoles) {
+      lines.push(line(role, 11, "normal", 2, BODY))
+    }
+    lines.push(line("Scripture", 12, "bold", 3, NAVY))
+    for (const reference of gift.scripture) {
+      lines.push(line(reference, 11, "normal", 2, BODY))
+    }
+    lines.push(line("Catechism of the Catholic Church", 12, "bold", 3, NAVY))
+    gift.catechism.forEach((reference, index) => {
+      const last = index === gift.catechism.length - 1
+      lines.push(line(`CCC ${reference}`, 11, "normal", last ? 12 : 2, BODY))
+    })
   }
 
   lines.push(line("All 25 gifts", 16, "bold", 8, NAVY))

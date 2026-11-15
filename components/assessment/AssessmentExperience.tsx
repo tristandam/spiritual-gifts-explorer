@@ -236,9 +236,6 @@ export function AssessmentExperience() {
               <p key={line}>{line}</p>
             ))}
           </div>
-          <p className="mt-5 text-sm leading-relaxed text-[#667085]">
-            There are no wrong answers. A lower score does not mean you lack God&apos;s love or grace. Answer for who you are today.
-          </p>
         </section>
       )}
 
@@ -268,9 +265,6 @@ export function AssessmentExperience() {
               Choose an answer to continue.
             </p>
           )}
-          <p className="mt-3 text-sm text-[#667085]">
-            On a keyboard, press 1 to 4 to answer, the left arrow to go back, and the right arrow to go forward.
-          </p>
         </div>
       )}
 

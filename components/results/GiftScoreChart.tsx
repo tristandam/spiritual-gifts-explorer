@@ -9,6 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
+import { MAX_GIFT_SCORE } from "@/lib/constants"
 import { scoreColor, type ScoredGift } from "@/lib/scoring"
 
 export function GiftScoreChart({ gifts }: { gifts: ScoredGift[] }) {
@@ -22,12 +23,12 @@ export function GiftScoreChart({ gifts }: { gifts: ScoredGift[] }) {
     <div className="rounded-3xl bg-white p-4 ring-1 ring-[#17243A]/10 sm:p-6">
       <h3 className="font-serif text-2xl text-[#17243A]">Strongest scores</h3>
       <p className="mt-1 text-sm text-[#667085]">
-        Bars of the same length and color share a score. The scale runs from 0 to 8.
+        Bars of the same length and color share a score. The scale runs from 0 to {MAX_GIFT_SCORE}.
       </p>
       <div className="mt-4 h-72 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} layout="vertical" margin={{ left: 8, right: 28, top: 8, bottom: 0 }}>
-            <XAxis type="number" domain={[0, 8]} ticks={[0, 2, 4, 6, 8]} stroke="#667085" />
+            <XAxis type="number" domain={[0, MAX_GIFT_SCORE]} ticks={[0, 3, 6, 9, 12]} stroke="#667085" />
             <YAxis
               type="category"
               dataKey="name"
@@ -49,7 +50,7 @@ export function GiftScoreChart({ gifts }: { gifts: ScoredGift[] }) {
         <thead>
           <tr>
             <th>Gift</th>
-            <th>Score out of 8</th>
+            <th>Score out of {MAX_GIFT_SCORE}</th>
           </tr>
         </thead>
         <tbody>

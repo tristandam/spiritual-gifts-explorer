@@ -35,10 +35,10 @@ export default function AboutPage() {
         <h2 className="font-serif text-3xl text-[#17243A]">How scoring works</h2>
         <div className="mt-3 space-y-3 leading-relaxed text-[#17243A]">
           <p>
-            There are 25 gifts and 50 original questions, two for each gift. Each answer is worth 1 to 4 points, so each gift scores from 2 to 8. The original diocesan inventory uses 75 questions. This shorter version is a new exploratory reflection, not an equivalent scoring edition of that inventory.
+            There are 25 gifts and 75 questions from the Diocese of Cleveland inventory, three for each gift. Each answer is worth 1 to 4 points, so each gift scores from 3 to 12.
           </p>
           <p>
-            Your strongest responses are the highest scores. If several gifts share a score, they are shown as equally strong. The app does not invent percentiles, probabilities, or a scientific ranking.
+            Your strongest responses are the three highest scores. If more gifts are tied with the third score, they are included too, up to five. Gifts that share a score are equally strong. The app does not invent percentiles, probabilities, or a scientific ranking.
           </p>
           <p>{RESULTS_DISCLAIMER}</p>
           <p>
